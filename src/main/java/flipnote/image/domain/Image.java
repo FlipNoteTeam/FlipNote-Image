@@ -29,8 +29,4 @@ public class Image extends BaseEntity {
 
 	private Long sizeBytes;
 
-	@Version
-	private Long version;
-
-
 }

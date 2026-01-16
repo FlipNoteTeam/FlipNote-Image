@@ -1,4 +1,5 @@
 package flipnote.image.domain;
 
-public class ReferenceType {
+public enum ReferenceType {
+	GROUP, USER, CARD_SET
 }
