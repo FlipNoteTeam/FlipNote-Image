@@ -1,4 +1,4 @@
-package flipnote.common;
+package flipnote.image.domain.model;
 
 import java.time.LocalDateTime;
 

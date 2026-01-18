@@ -1,5 +1,7 @@
-package flipnote.image.domain;
+package flipnote.image.domain.model.reference;
 
+import flipnote.image.domain.model.BaseEntity;
+import flipnote.image.domain.model.image.Image;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -27,14 +29,11 @@ import lombok.NoArgsConstructor;
 	)
 )
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ImageRef {
+public class ImageRef extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	/**
-	 * 그룹, 유저, 카드셋
-	 */
 	@Embedded
 	private Reference reference;
 
@@ -44,7 +43,7 @@ public class ImageRef {
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	private ImageStatus status;
+	private ImageRefStatus status;
 
 	@Version
 	private Long version;
@@ -75,7 +74,7 @@ public class ImageRef {
 			throw new IllegalArgumentException("이미지 필요");
 		}
 
-		if(this.status != ImageStatus.USING) {
+		if(this.status != ImageRefStatus.USING) {
 			throw new IllegalArgumentException("상태 변경 x");
 		}
 
@@ -86,7 +85,7 @@ public class ImageRef {
 	 * 삭제
 	 */
 	public void deactivate() {
-		this.status = ImageStatus.DELETED;
+		this.status = ImageRefStatus.DELETED;
 	}
 
 	/**
