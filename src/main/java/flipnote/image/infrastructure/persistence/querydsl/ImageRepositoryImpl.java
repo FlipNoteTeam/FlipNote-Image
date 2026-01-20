@@ -17,7 +17,7 @@ import flipnote.image.domain.model.reference.Reference;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class ImageQueryRepositoryImpl implements ImageQueryRepository {
+public class ImageRepositoryImpl implements ImageRepositoryCustom {
 
 	private final JPAQueryFactory queryFactory;
 

@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import flipnote.image.domain.model.reference.ImageRef;
 
-public interface ImageRefQueryRepository {
+public interface ImageRefRepositoryCustom {
 	/**
 	 * 특정 시간내에 연결이 안된 참조는 삭제하기 위해 조회
 	 * @param cutOffTime 마감시간

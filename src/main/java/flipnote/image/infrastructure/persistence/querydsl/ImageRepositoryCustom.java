@@ -6,7 +6,7 @@ import java.util.Optional;
 import flipnote.image.domain.model.image.Image;
 import flipnote.image.domain.model.reference.Reference;
 
-public interface ImageQueryRepository {
+public interface ImageRepositoryCustom {
 	/**
 	 * 이미지 조회
 	 * @param reference 이미지가 참조되는 곳의 타입과 아이디
