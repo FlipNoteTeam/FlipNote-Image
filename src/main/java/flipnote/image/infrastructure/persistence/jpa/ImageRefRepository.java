@@ -8,7 +8,7 @@ import flipnote.image.domain.model.reference.ImageRef;
 import flipnote.image.domain.model.reference.ReferenceType;
 import flipnote.image.infrastructure.persistence.querydsl.ImageRefQueryRepository;
 
-public interface JpaImageRefRepository extends JpaRepository<ImageRef, Long>, ImageRefQueryRepository {
+public interface ImageRefRepository extends JpaRepository<ImageRef, Long>, ImageRefQueryRepository {
 	/**
 	 * 참조되는 타입 및 아이디로 이미지 조회
 	 * @param type 그룹, 카드셋, 유저

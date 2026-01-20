@@ -38,12 +38,8 @@ public class ImageRef extends BaseEntity {
 	private Reference reference;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "image_id", nullable = false)
+	@JoinColumn(name = "image_id")
 	private Image image;
-
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	private ImageRefStatus status;
 
 	@Version
 	private Long version;

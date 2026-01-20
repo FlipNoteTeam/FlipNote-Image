@@ -11,8 +11,6 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import flipnote.image.domain.model.reference.ImageRef;
-import flipnote.image.domain.model.reference.ImageRefStatus;
-import flipnote.image.domain.model.reference.QImageRef;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -24,20 +22,21 @@ public class ImageRefQueryRepositoryImpl implements ImageRefQueryRepository {
 	/**
 	 * <=의 경우 중복 문제 발생 가능성 높아짐
 	 *
-	 * @param status 이미지 참조 상태
 	 * @param cutOffTime 특정 시간 ex) 10분
 	 * @param lastId 커서 기반 마지막 id
 	 * @param pageable 커서 기반
 	 * @return
 	 */
 	@Override
-	public List<ImageRef> findByStatusAndCreatedAtLessThanAndIdLessThan(ImageRefStatus status,
-		LocalDateTime cutOffTime, Long lastId, Pageable pageable) {
+	public List<ImageRef> findByCreatedAtLessThanAndIdLessThan(
+		LocalDateTime cutOffTime,
+		Long lastId,
+		Pageable pageable) {
 
 		int limit = pageable.getPageSize();
 
 		BooleanBuilder where = new BooleanBuilder()
-			.and(imageRef.status.eq(status))
+			.and(imageRef.image.isNull())
 			.and(imageRef.createdAt.lt(cutOffTime));
 
 		if (lastId != null) {
