@@ -50,38 +50,48 @@ public class ImageRef extends BaseEntity {
 	}
 
 	/**
-	 * 새로운 이미지 참조 생성
-	 * @param reference
-	 * @param image
+	 * 이미지 연결 여부
 	 * @return
 	 */
-	public static ImageRef attach(Reference reference, Image image) {
-		return new ImageRef(reference, image);
+	public boolean isAttached() {
+		return this.image != null && !isDeleted();
 	}
 
-	/* 도메인 규칙 */
+	/**
+	 * 이미지 연결
+	 * @param image
+	 */
+	public void attach(Image image) {
+		if (isDeleted()) throw new IllegalStateException("삭제된 참조는 연결할 수 없음");
+		if (image == null) throw new IllegalArgumentException("이미지 필요");
+		this.image = image;
+	}
+
+	/**
+	 * 이미지 연결만 끊기(미연결로)
+	 */
+	public void detach() {
+		if (isDeleted()) throw new IllegalStateException("삭제된 참조는 변경할 수 없음");
+		this.image = null;
+	}
 
 	/**
 	 * 이미지 교체
 	 * @param replaceImage
 	 */
 	public void replaceImage(Image replaceImage) {
-		if(replaceImage == null) {
-			throw new IllegalArgumentException("이미지 필요");
-		}
-
-		if(this.status != ImageRefStatus.USING) {
-			throw new IllegalArgumentException("상태 변경 x");
-		}
-
+		if (isDeleted()) throw new IllegalStateException("삭제된 참조는 교체할 수 없음");
+		if (replaceImage == null) throw new IllegalArgumentException("이미지 필요");
 		this.image = replaceImage;
 	}
 
 	/**
-	 * 삭제
+	 * 그룹, 유저, 카드셋 삭제할 경우 완전 삭제
 	 */
 	public void deactivate() {
-		this.status = ImageRefStatus.DELETED;
+		if (isDeleted()) return;
+		this.image = null;
+		this.markDeleted();
 	}
 
 	/**
