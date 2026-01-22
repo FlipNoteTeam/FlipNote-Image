@@ -1,10 +1,9 @@
 package flipnote.image.infrastructure.persistence.querydsl;
 
-import static flipnote.image.domain.model.image.QImage.*;
-import static flipnote.image.domain.model.reference.QImageRef.*;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -13,16 +12,21 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import flipnote.image.domain.model.image.Image;
 import flipnote.image.domain.model.image.QImage;
+import flipnote.image.domain.model.reference.QImageRef;
 import flipnote.image.domain.model.reference.Reference;
 import lombok.RequiredArgsConstructor;
 
+@Repository
 @RequiredArgsConstructor
 public class ImageRepositoryImpl implements ImageRepositoryCustom {
 
 	private final JPAQueryFactory queryFactory;
 
+	QImage image = QImage.image;
+	QImageRef imageRef = QImageRef.imageRef;
+
 	@Override
-	public Optional<Image> findImageByImageRef_Reference(Reference reference) {
+	public Optional<Image> findAttachedImage(Reference reference) {
 
 		BooleanBuilder where = new BooleanBuilder()
 			.and(imageRef.reference.type.eq(reference.getType()))
@@ -39,7 +43,7 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
 	}
 
 	@Override
-	public List<Image> findImageByImageRef_NotExist(Long lastId, int batchSize) {
+	public List<Image> findImagesNotExist(Long lastId, int batchSize) {
 
 		BooleanBuilder where = new BooleanBuilder();
 

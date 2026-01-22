@@ -2,6 +2,13 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '4.0.1'
     id 'io.spring.dependency-management' version '1.1.7'
+
+    // ✅ proto -> java/grpc stub 생성 플러그인
+    id 'com.google.protobuf' version '0.9.5'
+}
+
+ext {
+    springGrpcVersion = "1.0.1"
 }
 
 group = 'flipnote'
@@ -24,18 +31,34 @@ repositories {
     mavenCentral()
 }
 
+dependencyManagement {
+    imports {
+        // ✅ Spring gRPC BOM
+        mavenBom "org.springframework.grpc:spring-grpc-dependencies:$springGrpcVersion"
+    }
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // ✅ Spring gRPC Starter (서버/클라이언트 기본 오토컨피그 포함)
+    implementation 'org.springframework.grpc:spring-grpc-spring-boot-starter'
+
+    // ✅ (보통 BOM이 알아서 잡아주지만, 생성/컴파일이 꼬이면 아래 2개를 명시해도 됨)
+     implementation 'com.google.protobuf:protobuf-java'
+     implementation 'io.grpc:grpc-stub'
+
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-data-redis-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
+    testRuntimeOnly 'com.h2database:h2'
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
@@ -46,6 +69,43 @@ def querydslDir = layout.buildDirectory.dir("generated/querydsl").get().asFile
 
 tasks.withType(JavaCompile).configureEach {
     options.generatedSourceOutputDirectory.set(querydslDir)
+}
+
+/**
+ * ✅ proto 컴파일 설정
+ * - .proto 위치: src/main/proto
+ * - 생성 위치: build/generated/...
+ */
+protobuf {
+    // protoc / grpc plugin 버전은 BOM이 잡아주기도 하는데,
+    // 환경마다 꼬이는 경우가 있어 아래처럼 명시해두면 안정적이야.
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.25.3"
+    }
+    plugins {
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:1.64.0"
+        }
+    }
+    generateProtoTasks {
+        all().each { task ->
+            task.plugins {
+                grpc {}
+            }
+        }
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            // ✅ 생성된 grpc/java 소스를 컴파일 소스에 포함 (IDE 인식에도 도움)
+            srcDirs += [
+                    "$buildDir/generated/source/proto/main/java",
+                    "$buildDir/generated/source/proto/main/grpc"
+            ]
+        }
+    }
 }
 
 tasks.named('test') {

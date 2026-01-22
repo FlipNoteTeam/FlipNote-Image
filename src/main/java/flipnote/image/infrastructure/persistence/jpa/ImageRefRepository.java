@@ -3,11 +3,13 @@ package flipnote.image.infrastructure.persistence.jpa;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import flipnote.image.domain.model.reference.ImageRef;
 import flipnote.image.domain.model.reference.ReferenceType;
 import flipnote.image.infrastructure.persistence.querydsl.ImageRefRepositoryCustom;
 
+@Repository
 public interface ImageRefRepository extends JpaRepository<ImageRef, Long>, ImageRefRepositoryCustom {
 	/**
 	 * 참조되는 타입 및 아이디로 이미지 조회

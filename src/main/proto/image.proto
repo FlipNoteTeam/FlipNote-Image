@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+// 논리적 패키지 API 관점
+package image.v1;
+
+// Java 옵션 설정
+option java_multiple_files = true;
+option java_package = "flipnote.image.grpc.v1";  // Java 패키지 경로 설정
+option java_outer_classname = "ImageServiceProto";           // 외부 클래스 이름 설정
+
+// gRPC 서비스 정의
+service ImageCommandService {
+  rpc IssuePresignedUrl(IssuePresignedUrlRequest) returns (IssuePresignedUrlResponse);
+  rpc ConfirmUpload(ConfirmUploadRequest) returns (ConfirmUploadResponse);
+  rpc CleanOrphanImages(CleanOrphanImagesRequest) returns (CleanOrphanImagesResponse);
+}
+
+// 요청/응답 메시지
+message IssuePresignedUrlRequest {
+  string file_name = 1;
+  string content_type = 2;
+  int64 content_length = 3;
+}
+
+message IssuePresignedUrlResponse {
+  string presigned_url = 1;
+  string s3_key = 2;
+  int64 expires_at_epoch_sec = 3;
+}
+
+message ConfirmUploadRequest {
+  string s3_key = 1;
+  string original_file_name = 2;
+}
+
+message ConfirmUploadResponse {
+  int64 image_id = 1;
+  string image_url = 2;
+}
+
+message CleanOrphanImagesRequest {
+  int32 batch_size = 1;
+  int32 max_batches = 2;
+}
+
+message CleanOrphanImagesResponse {
+  int32 processed_batches = 1;
+  int32 s3_deleted_count = 2;
+  int32 db_deleted_count = 3;
+  int32 s3_failed_count = 4;
+  int32 db_failed_count = 5;
+}

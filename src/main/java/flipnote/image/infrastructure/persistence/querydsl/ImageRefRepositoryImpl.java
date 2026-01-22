@@ -1,23 +1,26 @@
 package flipnote.image.infrastructure.persistence.querydsl;
 
-import static flipnote.image.domain.model.reference.QImageRef.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import flipnote.image.domain.model.reference.ImageRef;
+import flipnote.image.domain.model.reference.QImageRef;
 import lombok.RequiredArgsConstructor;
 
+@Repository
 @RequiredArgsConstructor
 public class ImageRefRepositoryImpl implements ImageRefRepositoryCustom {
 
 	// private final JpaQueryFactory queryFactory;
 	private final JPAQueryFactory queryFactory;
+
+	QImageRef imageRef = QImageRef.imageRef;
 
 	/**
 	 * <=의 경우 중복 문제 발생 가능성 높아짐

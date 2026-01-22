@@ -12,7 +12,7 @@ public interface ImageRepositoryCustom {
 	 * @param reference 이미지가 참조되는 곳의 타입과 아이디
 	 * @return
 	 */
-	Optional<Image> findImageByImageRef_Reference(Reference reference);
+	Optional<Image> findAttachedImage(Reference reference);
 
-	List<Image> findImageByImageRef_NotExist(Long lastId, int batchSize);
+	List<Image> findImagesNotExist(Long lastId, int batchSize);
 }
