@@ -18,7 +18,7 @@ import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 
 @GrpcService
-public class ImageCommandGrpcService extends Image {
+public class ImageCommandGrpcService extends ImageCommandServiceGrpc.ImageCommandServiceImplBase {
 
 	private final ImageCommandService imageService;
 
