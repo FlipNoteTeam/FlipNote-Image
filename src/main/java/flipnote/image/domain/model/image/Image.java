@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,8 +25,27 @@ public class Image extends BaseEntity {
 	private String hash;
 
 	@Column(nullable = false, length = 1024)
+	private String s3Key;
+
+	@Column(nullable = false, length = 1024)
 	private String mimeType;
 
 	private Long sizeBytes;
 
+	@Builder
+	private Image(String hash, String s3Key) {
+		this.hash = hash;
+		this.s3Key = s3Key;
+	}
+
+	/**
+	 * s3 presignedUrl 생성시 임시로 저장하는 메서드
+	 * @param hash
+	 * @param s3Key
+	 * @return
+	 */
+	public static Image createBeforeSave(String hash, String s3Key) {
+		if(hash == null || hash.isBlank()) throw new IllegalArgumentException("hash is Blank");
+		if(s3Key == null || s3Key.isBlank()) throw new IllegalArgumentException("s3Key is Blank");
+	}
 }

@@ -5,7 +5,7 @@ import org.springframework.grpc.server.service.GrpcService;
 
 import flipnote.image.application.dto.CleanOrphanImagesCommand;
 import flipnote.image.application.dto.ConfirmUploadCommand;
-import flipnote.image.application.dto.IssuePresignedUrlCommand;
+import flipnote.image.application.port.in.command.IssuePresignedUrlCommand;
 import flipnote.image.application.service.ImageCommandService;
 import flipnote.image.grpc.v1.CleanOrphanImagesRequest;
 import flipnote.image.grpc.v1.CleanOrphanImagesResponse;

@@ -7,10 +7,10 @@ import flipnote.image.application.dto.CleanOrphanImagesCommand;
 import flipnote.image.application.dto.CleanOrphanImagesResult;
 import flipnote.image.application.dto.ConfirmUploadCommand;
 import flipnote.image.application.dto.ConfirmUploadResult;
-import flipnote.image.application.dto.IssuePresignedUrlCommand;
-import flipnote.image.application.dto.IssuePresignedUrlResult;
-import flipnote.image.application.port.out.ImageRefRepositoryPort;
-import flipnote.image.application.port.out.ImageRepositoryPort;
+import flipnote.image.application.port.in.command.IssuePresignedUrlCommand;
+import flipnote.image.application.port.in.result.IssuePresignedUrlResult;
+import flipnote.image.application.port.out.ImageRefPort;
+import flipnote.image.application.port.out.ImagePort;
 import flipnote.image.application.port.out.ImageStoragePort;
 import lombok.RequiredArgsConstructor;
 
@@ -18,8 +18,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ImageCommandService {
 
-	private final ImageRepositoryPort imageRepository;
-	private final ImageRefRepositoryPort imageRefRepository;
+	private final ImagePort imageRepository;
+	private final ImageRefPort imageRefRepository;
 	private final ImageStoragePort imageStorage;
 
 	/**
@@ -28,6 +28,9 @@ public class ImageCommandService {
 	 */
 	@Transactional(readOnly = true)
 	public IssuePresignedUrlResult issuePresignedUrl(IssuePresignedUrlCommand cmd) {
+
+
+
 		return null;
 	}
 
