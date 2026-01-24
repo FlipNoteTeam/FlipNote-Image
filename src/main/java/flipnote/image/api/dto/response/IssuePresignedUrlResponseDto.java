@@ -5,7 +5,7 @@ import java.net.URL;
 import flipnote.image.application.port.in.result.IssuePresignedUrlResult;
 
 public record IssuePresignedUrlResponseDto(
-	URL url,
+	String url,
 	Long imageRefId
 ) {
 	public static IssuePresignedUrlResponseDto from(IssuePresignedUrlResult result) {

@@ -10,13 +10,14 @@ import flipnote.image.application.port.out.ImagePort;
 import flipnote.image.domain.model.image.Image;
 import flipnote.image.infrastructure.persistence.jpa.ImageRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class ImageRepositoryAdapter implements ImagePort {
 
-    private final ImageRepository imageRepository; // Spring Data repo
-    private final JPAQueryFactory queryFactory;
+    private final ImageRepository imageRepository;
 
     /**
      * hash로 이미지 찾기
@@ -38,6 +39,8 @@ public class ImageRepositoryAdapter implements ImagePort {
     public ImageRow save(newImage newImage) {
 
         Image image = imageRepository.save(Image.createBeforeSave(newImage.hash(), newImage.s3Key()));
+
+        log.debug("saved id = " + image.getId());
 
         return new ImageRow(image.getId(), image.getHash(), image.getS3Key());
     }

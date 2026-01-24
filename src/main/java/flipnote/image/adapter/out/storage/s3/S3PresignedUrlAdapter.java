@@ -17,7 +17,7 @@ public class S3PresignedUrlAdapter implements PresignedUrlPort {
 
 	private final S3Presigner s3Presigner;
 
-	@Value("${cloud.s3.bucket}")
+	@Value("${cloud.aws.bucket}")
 	private String bucket;
 
 	/**

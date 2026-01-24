@@ -4,5 +4,5 @@ import flipnote.image.application.port.in.command.IssuePresignedUrlCommand;
 import flipnote.image.application.port.in.result.IssuePresignedUrlResult;
 
 public interface IssuePresignedUrlUseCase {
-	IssuePresignedUrlResult issue(IssuePresignedUrlCommand cmd);
+	IssuePresignedUrlResult issuePresignedUrl(IssuePresignedUrlCommand cmd);
 }

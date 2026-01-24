@@ -14,7 +14,9 @@ import flipnote.image.application.port.out.PresignedUrlPort;
 import flipnote.image.application.port.out.PublicUrlPort;
 import flipnote.image.domain.policy.ImageNamingPolicy;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class IssuePresignedUrlService implements IssuePresignedUrlUseCase {
@@ -30,7 +32,7 @@ public class IssuePresignedUrlService implements IssuePresignedUrlUseCase {
 
 	@Override
 	@Transactional
-	public IssuePresignedUrlResult issue(IssuePresignedUrlCommand cmd) {
+	public IssuePresignedUrlResult issuePresignedUrl(IssuePresignedUrlCommand cmd) {
 
 		String fileName = cmd.fileName();
 
@@ -50,6 +52,9 @@ public class IssuePresignedUrlService implements IssuePresignedUrlUseCase {
 		 * 기존 이미지에 연결한 ref를 생성하고 반환
 		 */
 		var existingImage = imagePort.findByHash(hash);
+
+		log.debug(hash);
+
 		if(existingImage.isPresent()) {
 			// 이미지 참조 저장
 			var imageRef = imageRefPort.save(existingImage.get().id());
@@ -60,8 +65,12 @@ public class IssuePresignedUrlService implements IssuePresignedUrlUseCase {
 
 		// 없으면 url을 발급
 		String presignedUrl = presignedUrlPort.issuePresignedUrl(s3Key, contentType, EXPIRE_MINUTES);
+
+		log.debug("presignedUrl "+presignedUrl);
+
 		// 이미지 저장 후 이미지 참조 저장
 		var saveImage = imagePort.save(new ImagePort.newImage(hash, s3Key));
+
 		var saveImageRef = imageRefPort.save(saveImage.id());
 
 		//발급 후 반환

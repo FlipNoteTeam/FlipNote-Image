@@ -18,14 +18,14 @@ public class Reference {
 	 * 그룹, 유저, 카드셋 타입
 	 */
 	@Enumerated(EnumType.STRING)
-	@Column(name = "reference_type", nullable = false)
+	@Column(name = "reference_type")
 	private ReferenceType type;
 
 	/**
 	 * 이미지가 참조되는 타입의 아이디
 	 * ex) 그룹 아이디, 유저 아이디, 카드셋 아이디
 	 */
-	@Column(name = "reference_id", nullable = false)
+	@Column(name = "reference_id")
 	private Long id;
 
 	private Reference(ReferenceType type, Long id) {

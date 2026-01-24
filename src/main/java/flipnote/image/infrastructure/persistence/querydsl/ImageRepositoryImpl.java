@@ -1,5 +1,8 @@
 package flipnote.image.infrastructure.persistence.querydsl;
 
+import static flipnote.image.domain.model.image.QImage.*;
+import static flipnote.image.domain.model.reference.QImageRef.*;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +17,7 @@ import flipnote.image.domain.model.image.Image;
 import flipnote.image.domain.model.image.QImage;
 import flipnote.image.domain.model.reference.QImageRef;
 import flipnote.image.domain.model.reference.Reference;
+import flipnote.image.domain.model.reference.ReferenceType;
 import lombok.RequiredArgsConstructor;
 
 @Repository
@@ -22,20 +26,19 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
 
 	private final JPAQueryFactory queryFactory;
 
-	QImage image = QImage.image;
-	QImageRef imageRef = QImageRef.imageRef;
+	// QImage image = QImage.image;
+	// QImageRef imageRef = QImageRef.imageRef;
 
 	@Override
-	public Optional<Image> findAttachedImage(Reference reference) {
+	public Optional<Image> findAttachedImage(Long referenceId, ReferenceType type) {
 
 		BooleanBuilder where = new BooleanBuilder()
-			.and(imageRef.reference.type.eq(reference.getType()))
-			.and(imageRef.reference.id.eq(reference.getId()));
+			.and(imageRef.reference.type.eq(type))
+			.and(imageRef.reference.id.eq(referenceId));
 
 		Image image = queryFactory
-			.select(QImage.image)
+			.select(imageRef.image)
 			.from(imageRef)
-			.join(imageRef.image, QImage.image)
 			.where(where)
 			.fetchOne();
 

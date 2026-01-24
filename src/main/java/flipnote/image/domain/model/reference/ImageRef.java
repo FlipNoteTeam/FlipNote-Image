@@ -17,6 +17,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.Version;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -44,9 +45,16 @@ public class ImageRef extends BaseEntity {
 	@Version
 	private Long version;
 
+	@Builder
 	private ImageRef(Reference reference, Image image) {
 		this.reference = reference;
 		this.image = image;
+	}
+
+	public static ImageRef createImageRef(Image image) {
+		return ImageRef.builder()
+			.image(image)
+			.build();
 	}
 
 	/**

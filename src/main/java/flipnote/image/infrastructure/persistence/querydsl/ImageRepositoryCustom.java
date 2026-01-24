@@ -5,14 +5,18 @@ import java.util.Optional;
 
 import flipnote.image.domain.model.image.Image;
 import flipnote.image.domain.model.reference.Reference;
+import flipnote.image.domain.model.reference.ReferenceType;
 
 public interface ImageRepositoryCustom {
+
 	/**
 	 * 이미지 조회
-	 * @param reference 이미지가 참조되는 곳의 타입과 아이디
+	 * 이미지가 참조되는 곳의 타입과 아이디
+	 * @param referenceId
+	 * @param type
 	 * @return
 	 */
-	Optional<Image> findAttachedImage(Reference reference);
+	Optional<Image> findAttachedImage(Long referenceId, ReferenceType type);
 
 	List<Image> findImagesNotExist(Long lastId, int batchSize);
 }

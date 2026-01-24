@@ -8,10 +8,10 @@ import flipnote.image.application.port.out.PublicUrlPort;
 @Component
 public class S3PublicUrlAdapter implements PublicUrlPort {
 
-	@Value("${cloud.s3.bucket}")
+	@Value("${cloud.aws.bucket}")
 	private String bucket;
 
-	@Value("${cloud.s3.region}")
+	@Value("${cloud.aws.region}")
 	private String region;
 
 	/**

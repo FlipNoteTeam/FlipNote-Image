@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import flipnote.image.api.dto.request.IssuePresignedUrlRequestDto;
 import flipnote.image.api.dto.response.IssuePresignedUrlResponseDto;
+import flipnote.image.application.port.in.IssuePresignedUrlUseCase;
 import flipnote.image.application.port.in.command.IssuePresignedUrlCommand;
 import flipnote.image.application.port.in.result.IssuePresignedUrlResult;
-import flipnote.image.application.service.ImageCommandService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ImageController {
 
-	private final ImageCommandService imageCommandService;
+	private final IssuePresignedUrlUseCase issuePresignedUrlUseCase;
 
 	@PostMapping("/upload")
 	public ResponseEntity<IssuePresignedUrlResponseDto> issuePresignedUrl(
@@ -28,7 +28,7 @@ public class ImageController {
 
 		IssuePresignedUrlCommand cmd = new IssuePresignedUrlCommand(req.fileName(), req.type());
 
-		IssuePresignedUrlResult result = imageCommandService.issuePresignedUrl(cmd);
+		IssuePresignedUrlResult result = issuePresignedUrlUseCase.issuePresignedUrl(cmd);
 
 		return ResponseEntity.ok(IssuePresignedUrlResponseDto.from(result));
 	}

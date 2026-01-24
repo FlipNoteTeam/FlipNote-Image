@@ -27,7 +27,6 @@ public class Image extends BaseEntity {
 	@Column(nullable = false, length = 1024)
 	private String s3Key;
 
-	@Column(nullable = false, length = 1024)
 	private String mimeType;
 
 	private Long sizeBytes;
@@ -47,5 +46,10 @@ public class Image extends BaseEntity {
 	public static Image createBeforeSave(String hash, String s3Key) {
 		if(hash == null || hash.isBlank()) throw new IllegalArgumentException("hash is Blank");
 		if(s3Key == null || s3Key.isBlank()) throw new IllegalArgumentException("s3Key is Blank");
+
+		return Image.builder()
+			.hash(hash)
+			.s3Key(s3Key)
+			.build();
 	}
 }
