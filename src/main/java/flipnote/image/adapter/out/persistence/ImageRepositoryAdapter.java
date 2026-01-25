@@ -8,6 +8,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import flipnote.image.application.port.out.ImagePort;
 import flipnote.image.domain.model.image.Image;
+import flipnote.image.domain.model.reference.ReferenceType;
 import flipnote.image.infrastructure.persistence.jpa.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,18 @@ public class ImageRepositoryAdapter implements ImagePort {
     @Override
     public Optional<ImageRow> findByHash(String hash) {
         return imageRepository.findByHash(hash)
+            .map(image -> new ImageRow(image.getId(), image.getHash(), image.getS3Key()));
+    }
+
+    /**
+     * 타입과 아이디를 통해 이미지 조회
+     * @param referenceType
+     * @param referenceId
+     * @return
+     */
+    @Override
+    public Optional<ImageRow> findByReference(ReferenceType referenceType, Long referenceId) {
+        return imageRepository.findAttachedImage(referenceId, referenceType)
             .map(image -> new ImageRow(image.getId(), image.getHash(), image.getS3Key()));
     }
 
