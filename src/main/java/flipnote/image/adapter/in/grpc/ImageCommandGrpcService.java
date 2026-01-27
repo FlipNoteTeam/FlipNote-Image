@@ -5,6 +5,8 @@ import org.springframework.grpc.server.service.GrpcService;
 
 import flipnote.image.application.port.in.GetImageUrlByReferenceUseCase;
 import flipnote.image.domain.model.reference.ReferenceType;
+import flipnote.image.grpc.v1.ActivateImageRequest;
+import flipnote.image.grpc.v1.ActivateImageResponse;
 import flipnote.image.grpc.v1.CleanOrphanImagesRequest;
 import flipnote.image.grpc.v1.CleanOrphanImagesResponse;
 import flipnote.image.grpc.v1.ConfirmUploadRequest;
@@ -44,6 +46,11 @@ public class ImageCommandGrpcService extends ImageCommandServiceGrpc.ImageComman
 		} catch (Exception e) {
 			responseObserver.onError(e);
 		}
+	}
+
+	@Override
+	public void activateImage(ActivateImageRequest request, StreamObserver<ActivateImageResponse> responseObserver) {
+		super.activateImage(request, responseObserver);
 	}
 
 	@Override

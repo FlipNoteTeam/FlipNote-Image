@@ -71,6 +71,7 @@ public class IssuePresignedUrlService implements IssuePresignedUrlUseCase {
 		// 이미지 저장 후 이미지 참조 저장
 		var saveImage = imagePort.save(new ImagePort.newImage(hash, s3Key));
 
+		//이미지 참조에 hash랑 s3키만 존재하는 이미지 엔티티를 연결
 		var saveImageRef = imageRefPort.save(saveImage.id());
 
 		//발급 후 반환

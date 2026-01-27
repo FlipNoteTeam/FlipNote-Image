@@ -37,4 +37,27 @@ public class ImageRefRepositoryAdapter implements ImageRefPort {
 
         return new ImageRefRow(imageRef.getId(), image.getId());
     }
+
+    /**
+     * 이미지 참조 활성화 참조되는 타입과 아이디를 업데이트
+     * @param imageRefId
+     * @param referenceType
+     * @param referenceId
+     */
+    @Override
+    public void activate(Long imageRefId, ReferenceType referenceType, Long referenceId) {
+        ImageRef imageRef = imageRefRepository.findById(imageRefId).orElseThrow(
+            () -> new IllegalArgumentException("ImageRef is Blank")
+        );
+
+        imageRef.getReference().activate(referenceType, referenceId);
+
+        imageRefRepository.save(imageRef);
+
+    }
+
+    @Override
+    public Long getImageIdByRefId(Long imageRefId) {
+        return imageRefRepository.findImageIdByImageRefId(imageRefId);
+    }
 }

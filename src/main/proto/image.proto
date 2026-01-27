@@ -10,7 +10,10 @@ option java_outer_classname = "ImageServiceProto";           // 외부 클래스
 
 // gRPC 서비스 정의
 service ImageCommandService {
+  // 이미지 url 조회
   rpc GetUrlByReference(GetUrlByReferenceRequest) returns (GetUrlByReferenceResponse);
+  // 이미지 활성화
+  rpc ActivateImage(ActivateImageRequest) returns (ActivateImageResponse);
   rpc ConfirmUpload(ConfirmUploadRequest) returns (ConfirmUploadResponse);
   rpc CleanOrphanImages(CleanOrphanImagesRequest) returns (CleanOrphanImagesResponse);
 }
@@ -30,6 +33,16 @@ message GetUrlByReferenceRequest {
 
 message GetUrlByReferenceResponse {
   string image_url = 1;
+}
+
+message ActivateImageRequest {
+  int64 image_ref_id = 1;
+  Type reference_type = 2;
+  int64 reference_id = 3;
+}
+
+message ActivateImageResponse {
+//  int64 image_ref_id = 1;
 }
 
 message ConfirmUploadRequest {
