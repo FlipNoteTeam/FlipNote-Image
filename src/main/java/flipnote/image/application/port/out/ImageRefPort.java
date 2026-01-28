@@ -1,15 +1,26 @@
 package flipnote.image.application.port.out;
 
+import java.util.Optional;
+
 import flipnote.image.domain.model.reference.ReferenceType;
 
 public interface ImageRefPort {
 
-    ImageRefRow save(Long imageId);
+    ImageRefAndImage save(Long imageId);
 
 	//이미지 참조 활성화
 	void activate(Long imageRefId, ReferenceType referenceType, Long referenceId);
 
 	Long getImageIdByRefId(Long imageRefId);
 
-	record ImageRefRow(Long id, Long imageId) {}
+	Optional<Long> findByReference(ReferenceType type, Long referenceId);
+
+	void delete(Long id);
+
+	ImageRefRow findById(Long newImageRefId);
+
+
+
+	record ImageRefAndImage(Long id, Long imageId) {}
+	record ImageRefRow(Long id, ReferenceType type, Long referenceId) {}
 }

@@ -8,10 +8,8 @@ import flipnote.image.application.port.in.GetImageUrlByReferenceUseCase;
 import flipnote.image.domain.model.reference.ReferenceType;
 import flipnote.image.grpc.v1.ActivateImageRequest;
 import flipnote.image.grpc.v1.ActivateImageResponse;
-import flipnote.image.grpc.v1.CleanOrphanImagesRequest;
-import flipnote.image.grpc.v1.CleanOrphanImagesResponse;
-import flipnote.image.grpc.v1.ConfirmUploadRequest;
-import flipnote.image.grpc.v1.ConfirmUploadResponse;
+import flipnote.image.grpc.v1.ChangeImageRequest;
+import flipnote.image.grpc.v1.ChangeImageResponse;
 import flipnote.image.grpc.v1.GetUrlByReferenceRequest;
 import flipnote.image.grpc.v1.GetUrlByReferenceResponse;
 import flipnote.image.grpc.v1.ImageCommandServiceGrpc;
@@ -66,13 +64,7 @@ public class ImageCommandGrpcService extends ImageCommandServiceGrpc.ImageComman
 	}
 
 	@Override
-	public void confirmUpload(ConfirmUploadRequest request,
-		StreamObserver<ConfirmUploadResponse> responseObserver) {
-	}
-
-	@Override
-	public void cleanOrphanImages(CleanOrphanImagesRequest request,
-		StreamObserver<CleanOrphanImagesResponse> responseObserver) {
+	public void changeImage(ChangeImageRequest request, StreamObserver<ChangeImageResponse> responseObserver) {
 
 	}
 

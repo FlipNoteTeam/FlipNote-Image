@@ -14,8 +14,8 @@ service ImageCommandService {
   rpc GetUrlByReference(GetUrlByReferenceRequest) returns (GetUrlByReferenceResponse);
   // 이미지 활성화
   rpc ActivateImage(ActivateImageRequest) returns (ActivateImageResponse);
-  rpc ConfirmUpload(ConfirmUploadRequest) returns (ConfirmUploadResponse);
-  rpc CleanOrphanImages(CleanOrphanImagesRequest) returns (CleanOrphanImagesResponse);
+  // 이미지 변경
+  rpc ChangeImage(ChangeImageRequest) returns (ChangeImageResponse);
 }
 
 // 요청/응답 메시지
@@ -45,25 +45,13 @@ message ActivateImageResponse {
 //  int64 image_ref_id = 1;
 }
 
-message ConfirmUploadRequest {
-  string s3_key = 1;
-  string original_file_name = 2;
+message ChangeImageRequest {
+  Type reference_type = 1;
+  int64 reference_id = 2;
+  int64 image_ref_id = 3;
 }
 
-message ConfirmUploadResponse {
-  int64 image_id = 1;
-  string image_url = 2;
-}
-
-message CleanOrphanImagesRequest {
-  int32 batch_size = 1;
-  int32 max_batches = 2;
-}
-
-message CleanOrphanImagesResponse {
-  int32 processed_batches = 1;
-  int32 s3_deleted_count = 2;
-  int32 db_deleted_count = 3;
-  int32 s3_failed_count = 4;
-  int32 db_failed_count = 5;
+message ChangeImageResponse {
+  int64 image_ref_id = 1;
+  string url = 2;
 }

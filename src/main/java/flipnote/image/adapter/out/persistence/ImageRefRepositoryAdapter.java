@@ -8,7 +8,6 @@ import flipnote.image.application.port.out.ImageRefPort;
 
 import flipnote.image.domain.model.image.Image;
 import flipnote.image.domain.model.reference.ImageRef;
-import flipnote.image.domain.model.reference.Reference;
 import flipnote.image.domain.model.reference.ReferenceType;
 import flipnote.image.infrastructure.persistence.jpa.ImageRefRepository;
 import flipnote.image.infrastructure.persistence.jpa.ImageRepository;
@@ -27,7 +26,7 @@ public class ImageRefRepositoryAdapter implements ImageRefPort {
      * @return
      */
     @Override
-    public ImageRefRow save(Long imageId) {
+    public ImageRefAndImage save(Long imageId) {
 
         Image image = imageRepository.findById(imageId).orElseThrow(
             () -> new IllegalArgumentException("image is blank")
@@ -35,7 +34,7 @@ public class ImageRefRepositoryAdapter implements ImageRefPort {
 
         ImageRef imageRef = imageRefRepository.save(ImageRef.createImageRef(image));
 
-        return new ImageRefRow(imageRef.getId(), image.getId());
+        return new ImageRefAndImage(imageRef.getId(), image.getId());
     }
 
     /**
@@ -56,8 +55,43 @@ public class ImageRefRepositoryAdapter implements ImageRefPort {
 
     }
 
+    /**
+     * 이미지 아이디 조회
+     * @param imageRefId
+     * @return
+     */
     @Override
     public Long getImageIdByRefId(Long imageRefId) {
         return imageRefRepository.findImageIdByImageRefId(imageRefId);
+    }
+
+    /**
+     * 참조타입과 아이디로부터 이미지 조회
+     * @param type
+     * @param referenceId
+     * @return
+     */
+    @Override
+    public Optional<Long> findByReference(ReferenceType type, Long referenceId) {
+        return imageRefRepository
+            .findByReference_TypeAndReference_Id(type, referenceId)
+            .map(ImageRef::getId);
+    }
+
+    @Override
+    public void delete(Long id) {
+        imageRefRepository.deleteById(id);
+    }
+
+    @Override
+    public ImageRefRow findById(Long imageRefId) {
+        ImageRef imageRef = imageRefRepository.findById(imageRefId).orElseThrow(
+            () -> new IllegalArgumentException("Image")
+        );
+
+        ReferenceType type = imageRef.getReference().getType();
+        Long referenceId = imageRef.getReference().getId();
+
+        return new ImageRefRow(imageRef.getId(), type, referenceId);
     }
 }
