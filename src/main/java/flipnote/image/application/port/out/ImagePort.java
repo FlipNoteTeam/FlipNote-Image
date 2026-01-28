@@ -10,9 +10,11 @@ public interface ImagePort {
     Optional<ImageRow> findByReference(ReferenceType referenceType, Long referenceId);
     ImageRow save(newImage newImage);
 
-    Optional<ImageRow> findById(Long imageId);
+    ImageHeadRow findImageHeadById(Long imageId);
 
+    void updateMetadata(Long imageId, String mimeType, long contentLength);
 
     record ImageRow(long id, String hash, String s3Key) {}
     record newImage(String hash, String s3Key) {}
+    record ImageHeadRow(long id, String s3Key, String mimeType, Long sizeBytes) {}
 }

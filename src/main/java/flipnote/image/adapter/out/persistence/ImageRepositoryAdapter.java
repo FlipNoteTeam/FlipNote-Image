@@ -57,4 +57,32 @@ public class ImageRepositoryAdapter implements ImagePort {
 
         return new ImageRow(image.getId(), image.getHash(), image.getS3Key());
     }
+
+    /**
+     * 이미지 아이디를 통해 이미지의 메타 데이터 정보 출력
+     * @param imageId
+     * @return
+     */
+    @Override
+    public ImageHeadRow findImageHeadById(Long imageId) {
+
+        Image image = imageRepository.findById(imageId).orElseThrow(
+            () -> new IllegalArgumentException("image not Exist")
+        );
+
+        return new ImageHeadRow(image.getId(),image.getS3Key(), image.getMimeType(), image.getSizeBytes());
+    }
+
+    /**
+     * 이미지의 메타테이더 정보 업데이트
+     * @param imageId
+     * @param mimeType
+     * @param contentLength
+     */
+    @Override
+    public void updateMetadata(Long imageId, String mimeType, long contentLength) {
+        int updated =  imageRepository.updateMetadata(imageId, mimeType, contentLength);
+
+        if(updated == 0) throw new IllegalArgumentException("Image not Exist");
+    }
 }

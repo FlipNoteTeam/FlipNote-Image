@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import flipnote.image.application.port.in.ActivateImageUseCase;
 import flipnote.image.application.port.out.ImagePort;
 import flipnote.image.application.port.out.ImageRefPort;
-import flipnote.image.domain.model.image.ImageMeta;
+import flipnote.image.application.port.out.ObjectMetadataPort;
 import flipnote.image.domain.model.reference.ReferenceType;
 import lombok.RequiredArgsConstructor;
 
@@ -15,6 +15,7 @@ public class ActivateImageService implements ActivateImageUseCase {
 
 	private final ImagePort imagePort;
 	private final ImageRefPort imageRefPort;
+	private final ObjectMetadataPort objectMetadataPort;
 
 	/**
 	 * 이미지 활성화
@@ -23,16 +24,22 @@ public class ActivateImageService implements ActivateImageUseCase {
 	 * @param referenceId 참조 아이디
 	 */
 	@Override
-	public ImageMeta activateImage(Long imageRefId, ReferenceType referenceType, Long referenceId) {
+	public void activateImage(Long imageRefId, ReferenceType referenceType, Long referenceId) {
 		//이미지 참조 활성화
 		imageRefPort.activate(imageRefId, referenceType, referenceId);
 
 		//이미지 참조로부터 이미지 아이디 조회
+		//범용성 문제로 두가지를 분리
 		Long imageId = imageRefPort.getImageIdByRefId(imageRefId);
-		// 위의 두가지를 분리한 이유는 범용성 때문
 
-		imagePort.findById(imageId);
+		var row = imagePort.findImageHeadById(imageId);
 
-		return null;
+		String mimeType = row.mimeType();
+		Long sizeBytes = row.sizeBytes();
+
+		if(mimeType == null || mimeType.isBlank() || sizeBytes == null) {
+			var metadata = objectMetadataPort.head(row.s3Key());
+			imagePort.updateMetadata(imageId, metadata.contentType(), metadata.contentLength());
+		}
 	}
 }
