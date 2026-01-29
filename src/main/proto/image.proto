@@ -10,22 +10,26 @@ option java_outer_classname = "ImageServiceProto";           // 외부 클래스
 
 // gRPC 서비스 정의
 service ImageCommandService {
-  rpc IssuePresignedUrl(IssuePresignedUrlRequest) returns (IssuePresignedUrlResponse);
+  rpc GetUrlByReference(GetUrlByReferenceRequest) returns (GetUrlByReferenceResponse);
   rpc ConfirmUpload(ConfirmUploadRequest) returns (ConfirmUploadResponse);
   rpc CleanOrphanImages(CleanOrphanImagesRequest) returns (CleanOrphanImagesResponse);
 }
 
 // 요청/응답 메시지
-message IssuePresignedUrlRequest {
-  string file_name = 1;
-  string content_type = 2;
-  int64 content_length = 3;
+enum Type {
+  REFERENCE_TYPE_UNSPECIFIED = 0;
+  USER = 1;
+  GROUP = 2;
+  CARD_SET = 3;
 }
 
-message IssuePresignedUrlResponse {
-  string presigned_url = 1;
-  string s3_key = 2;
-  int64 expires_at_epoch_sec = 3;
+message GetUrlByReferenceRequest {
+  Type reference_type = 1;
+  int64 reference_id = 2;
+}
+
+message GetUrlByReferenceResponse {
+  string image_url = 1;
 }
 
 message ConfirmUploadRequest {
