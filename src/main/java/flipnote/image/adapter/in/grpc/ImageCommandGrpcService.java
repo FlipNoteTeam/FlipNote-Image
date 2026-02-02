@@ -3,12 +3,13 @@ package flipnote.image.adapter.in.grpc;
 
 import org.springframework.grpc.server.service.GrpcService;
 
+import flipnote.image.application.port.in.ActivateImageUseCase;
 import flipnote.image.application.port.in.GetImageUrlByReferenceUseCase;
 import flipnote.image.domain.model.reference.ReferenceType;
-import flipnote.image.grpc.v1.CleanOrphanImagesRequest;
-import flipnote.image.grpc.v1.CleanOrphanImagesResponse;
-import flipnote.image.grpc.v1.ConfirmUploadRequest;
-import flipnote.image.grpc.v1.ConfirmUploadResponse;
+import flipnote.image.grpc.v1.ActivateImageRequest;
+import flipnote.image.grpc.v1.ActivateImageResponse;
+import flipnote.image.grpc.v1.ChangeImageRequest;
+import flipnote.image.grpc.v1.ChangeImageResponse;
 import flipnote.image.grpc.v1.GetUrlByReferenceRequest;
 import flipnote.image.grpc.v1.GetUrlByReferenceResponse;
 import flipnote.image.grpc.v1.ImageCommandServiceGrpc;
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class ImageCommandGrpcService extends ImageCommandServiceGrpc.ImageCommandServiceImplBase {
 
 	private final GetImageUrlByReferenceUseCase getImageUrlByReferenceUseCase;
+	private final ActivateImageUseCase activateImageUseCase;
 
 	/**
 	 * 참조 타입 및 아이디를 통해 url 조회
@@ -46,14 +48,23 @@ public class ImageCommandGrpcService extends ImageCommandServiceGrpc.ImageComman
 		}
 	}
 
+	/**
+	 * 이미지 활성화
+	 * @param request
+	 * @param responseObserver
+	 */
 	@Override
-	public void confirmUpload(ConfirmUploadRequest request,
-		StreamObserver<ConfirmUploadResponse> responseObserver) {
+	public void activateImage(ActivateImageRequest request, StreamObserver<ActivateImageResponse> responseObserver) {
+		try {
+			ReferenceType type = mapType(request.getReferenceType());
+			activateImageUseCase.activateImage(request.getImageRefId(), type, request.getReferenceId());
+		} catch (Exception e) {
+			responseObserver.onError(e);
+		}
 	}
 
 	@Override
-	public void cleanOrphanImages(CleanOrphanImagesRequest request,
-		StreamObserver<CleanOrphanImagesResponse> responseObserver) {
+	public void changeImage(ChangeImageRequest request, StreamObserver<ChangeImageResponse> responseObserver) {
 
 	}
 

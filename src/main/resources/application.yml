@@ -1,10 +1,17 @@
+server:
+  port: 8082
+
 spring:
   application:
-    name: flipnote
+    name: image
+
+  grpc:
+    server:
+      port: 9090
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${SPRING_DATASOURCE_URL}
+    url: ${DB_URL:jdbc:mysql://localhost:3306/flipnote_image}
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
 
@@ -44,3 +51,4 @@ image:
 logging:
   level:
     flipnote.image: DEBUG
+

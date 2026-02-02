@@ -36,4 +36,9 @@ public class Reference {
 		this.type = type;
 		this.id = id;
 	}
+
+	public void activate(ReferenceType referenceType, Long referenceId) {
+		this.type = referenceType;
+		this.id = referenceId;
+	}
 }

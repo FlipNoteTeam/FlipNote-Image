@@ -26,5 +26,4 @@ cloud:
     credentials:
       access-key: dummy_access_key
       secret-key: dummy_secret_key
-  s3:
     bucket: dummy_bucket

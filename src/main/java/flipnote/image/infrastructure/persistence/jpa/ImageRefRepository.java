@@ -3,6 +3,8 @@ package flipnote.image.infrastructure.persistence.jpa;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import flipnote.image.domain.model.reference.ImageRef;
@@ -26,4 +28,12 @@ public interface ImageRefRepository extends JpaRepository<ImageRef, Long>, Image
 	 * @return
 	 */
 	boolean existsByImage_Id(Long imageId);
+
+	/**
+	 * 이미지 아이디 조회
+	 * @param imageRefId
+	 * @return
+	 */
+	@Query("select ir.image.id from ImageRef ir where ir.id = :imageRefId")
+	Long findImageIdByImageRefId(@Param("imageRefId") Long imageRefId);
 }
