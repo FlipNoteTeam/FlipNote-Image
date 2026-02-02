@@ -1,23 +1,26 @@
-FROM gradle:8-jdk21 AS build
+FROM gradle:8-jdk17 AS build
 WORKDIR /app
+
+COPY gradlew ./
+COPY gradle ./gradle
+RUN chmod +x gradlew
 
 COPY build.gradle settings.gradle ./
 COPY src ./src
 
-RUN gradle bootJar --no-daemon
+RUN ./gradlew generateProto --no-daemon
+RUN ./gradlew bootJar --no-daemon
 
 FROM amazoncorretto:17.0.17-alpine3.22
 WORKDIR /app
 
 ENV TZ=Asia/Seoul
-RUN apt-get update \
-    && apt-get install -y tzdata \
+RUN apk add --no-cache tzdata \
     && ln -sf /usr/share/zoneinfo/$TZ /etc/localtime \
-    && echo $TZ > /etc/timezone \
-    && rm -rf /var/lib/apt/lists/*
+    && echo $TZ > /etc/timezone
 
-COPY --from=build /app/build/libs/image-0.0.1-SNAPSHOT.jar .
+COPY --from=build /app/build/libs/*.jar app.jar
 
 EXPOSE 8082 9090
 
-ENTRYPOINT ["java", "-jar", "user-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
