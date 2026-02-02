@@ -6,7 +6,7 @@ COPY src ./src
 
 RUN gradle bootJar --no-daemon
 
-FROM eclipse-temurin:21-jre
+FROM amazoncorretto:17.0.17-alpine3.22
 WORKDIR /app
 
 ENV TZ=Asia/Seoul
@@ -16,7 +16,7 @@ RUN apt-get update \
     && echo $TZ > /etc/timezone \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=build /app/build/libs/user-0.0.1-SNAPSHOT.jar .
+COPY --from=build /app/build/libs/image-0.0.1-SNAPSHOT.jar .
 
 EXPOSE 8082 9090
 
