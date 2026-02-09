@@ -81,11 +81,11 @@ tasks.withType(JavaCompile).configureEach {
  */
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:3.25.3"
+        artifact = "com.google.protobuf:protoc:4.33.2"
     }
     plugins {
         grpc {
-            artifact = "io.grpc:protoc-gen-grpc-java:1.64.0"
+            artifact = "io.grpc:protoc-gen-grpc-java:1.77.1"
         }
     }
     generateProtoTasks {
