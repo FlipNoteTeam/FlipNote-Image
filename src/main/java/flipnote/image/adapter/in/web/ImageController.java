@@ -1,4 +1,4 @@
-package flipnote.image.api;
+package flipnote.image.adapter.in.web;
 
 
 import org.springframework.http.ResponseEntity;
