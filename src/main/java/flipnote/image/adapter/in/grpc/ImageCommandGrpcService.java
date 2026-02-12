@@ -4,6 +4,7 @@ package flipnote.image.adapter.in.grpc;
 import org.springframework.grpc.server.service.GrpcService;
 
 import flipnote.image.application.port.in.ActivateImageUseCase;
+import flipnote.image.application.port.in.ChangeImageUseCase;
 import flipnote.image.application.port.in.GetImageUrlByReferenceUseCase;
 import flipnote.image.domain.model.reference.ReferenceType;
 import flipnote.image.grpc.v1.ActivateImageRequest;
@@ -23,6 +24,7 @@ public class ImageCommandGrpcService extends ImageCommandServiceGrpc.ImageComman
 
 	private final GetImageUrlByReferenceUseCase getImageUrlByReferenceUseCase;
 	private final ActivateImageUseCase activateImageUseCase;
+	private final ChangeImageUseCase changeImageUseCase;
 
 	/**
 	 * 참조 타입 및 아이디를 통해 url 조회
@@ -65,7 +67,12 @@ public class ImageCommandGrpcService extends ImageCommandServiceGrpc.ImageComman
 
 	@Override
 	public void changeImage(ChangeImageRequest request, StreamObserver<ChangeImageResponse> responseObserver) {
-
+		try {
+			ReferenceType type = mapType(request.getReferenceType());
+			changeImageUseCase.changeImage(request.getImageRefId(), type, request.getReferenceId());
+		} catch (Exception e) {
+			responseObserver.onError(e);
+		}
 	}
 
 	/**
