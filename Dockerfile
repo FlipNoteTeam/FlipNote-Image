@@ -21,6 +21,6 @@ RUN apk add --no-cache tzdata \
 
 COPY --from=build /app/build/libs/*.jar app.jar
 
-EXPOSE 8082 9090
+EXPOSE 8082 9092
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
