@@ -12,7 +12,9 @@ import flipnote.image.domain.model.reference.ReferenceType;
 import flipnote.image.infrastructure.persistence.jpa.ImageRefRepository;
 import flipnote.image.infrastructure.persistence.jpa.ImageRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class ImageRefRepositoryAdapter implements ImageRefPort {
@@ -34,6 +36,8 @@ public class ImageRefRepositoryAdapter implements ImageRefPort {
 
         ImageRef imageRef = imageRefRepository.save(ImageRef.createImageRef(image));
 
+        log.debug(imageRef.getId().toString());
+
         return new ImageRefAndImage(imageRef.getId(), image.getId());
     }
 
@@ -45,13 +49,18 @@ public class ImageRefRepositoryAdapter implements ImageRefPort {
      */
     @Override
     public void activate(Long imageRefId, ReferenceType referenceType, Long referenceId) {
+
+        log.debug("fsdf "+imageRefId.toString());
+
         ImageRef imageRef = imageRefRepository.findById(imageRefId).orElseThrow(
             () -> new IllegalArgumentException("ImageRef is Blank")
         );
 
-        imageRef.getReference().activate(referenceType, referenceId);
+        imageRef.activate(referenceType, referenceId);
 
         imageRefRepository.save(imageRef);
+
+        log.debug("save");
 
     }
 

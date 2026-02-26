@@ -17,7 +17,9 @@ import flipnote.image.grpc.v1.ImageCommandServiceGrpc;
 import flipnote.image.grpc.v1.Type;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @GrpcService
 @RequiredArgsConstructor
 public class ImageCommandGrpcService extends ImageCommandServiceGrpc.ImageCommandServiceImplBase {
@@ -59,8 +61,15 @@ public class ImageCommandGrpcService extends ImageCommandServiceGrpc.ImageComman
 	public void activateImage(ActivateImageRequest request, StreamObserver<ActivateImageResponse> responseObserver) {
 		try {
 			ReferenceType type = mapType(request.getReferenceType());
+
+			log.debug("{} {} {}", type.name(), request.getImageRefId(), request.getReferenceId());
+
 			activateImageUseCase.activateImage(request.getImageRefId(), type, request.getReferenceId());
+
+			responseObserver.onNext(ActivateImageResponse.newBuilder().build());
+			responseObserver.onCompleted();
 		} catch (Exception e) {
+			log.error("gRPC 에러 메시지: {}", e.getMessage());
 			responseObserver.onError(e);
 		}
 	}

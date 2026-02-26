@@ -60,7 +60,7 @@ public class IssuePresignedUrlService implements IssuePresignedUrlUseCase {
 			var imageRef = imageRefPort.save(existingImage.get().id());
 			String url = publicUrlPort.urlOf(existingImage.get().s3Key());
 
-			return new IssuePresignedUrlResult(imageRef.id(), url);
+			return new IssuePresignedUrlResult(imageRef.imageRefId(), url);
 		}
 
 		// 없으면 url을 발급
@@ -75,6 +75,6 @@ public class IssuePresignedUrlService implements IssuePresignedUrlUseCase {
 		var saveImageRef = imageRefPort.save(saveImage.id());
 
 		//발급 후 반환
-		return new IssuePresignedUrlResult(saveImageRef.imageId(), presignedUrl);
+		return new IssuePresignedUrlResult(saveImageRef.imageRefId(), presignedUrl);
 	}
 }

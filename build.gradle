@@ -71,7 +71,7 @@ dependencies {
 
 def querydslDir = layout.buildDirectory.dir("generated/querydsl").get().asFile
 
-tasks.withType(JavaCompile).configureEach {
+tasks.named('compileJava', JavaCompile) {
     options.generatedSourceOutputDirectory.set(querydslDir)
 }
 
