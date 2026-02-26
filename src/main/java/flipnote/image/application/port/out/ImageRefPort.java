@@ -21,6 +21,6 @@ public interface ImageRefPort {
 
 
 
-	record ImageRefAndImage(Long id, Long imageId) {}
+	record ImageRefAndImage(Long imageRefId, Long imageId) {}
 	record ImageRefRow(Long id, ReferenceType type, Long referenceId) {}
 }

@@ -57,6 +57,10 @@ public class ImageRef extends BaseEntity {
 			.build();
 	}
 
+	public void activate(ReferenceType referenceType, Long referenceId) {
+		this.reference = Reference.of(referenceType, referenceId);
+	}
+
 	/**
 	 * 이미지 연결 여부
 	 * @return

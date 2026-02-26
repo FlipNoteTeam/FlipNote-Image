@@ -42,7 +42,7 @@ message ActivateImageRequest {
 }
 
 message ActivateImageResponse {
-//  int64 image_ref_id = 1;
+//    int64 image_ref_id = 1;
 }
 
 message ChangeImageRequest {

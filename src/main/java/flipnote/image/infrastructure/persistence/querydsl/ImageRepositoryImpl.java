@@ -26,9 +26,6 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
 
 	private final JPAQueryFactory queryFactory;
 
-	// QImage image = QImage.image;
-	// QImageRef imageRef = QImageRef.imageRef;
-
 	@Override
 	public Optional<Image> findAttachedImage(Long referenceId, ReferenceType type) {
 
