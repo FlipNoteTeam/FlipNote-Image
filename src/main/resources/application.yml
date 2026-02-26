@@ -7,7 +7,7 @@ spring:
 
   grpc:
     server:
-      port: 9090
+      port: 9092
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
