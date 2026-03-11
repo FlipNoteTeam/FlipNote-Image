@@ -21,6 +21,6 @@ public class S3PublicUrlAdapter implements PublicUrlPort {
 	 */
 	@Override
 	public String urlOf(String s3Key) {
-		return "https://"+bucket+".s3."+region+".awazonaws.com/"+s3Key;
+		return "https://"+bucket+".s3."+region+".amazonaws.com/"+s3Key;
 	}
 }
