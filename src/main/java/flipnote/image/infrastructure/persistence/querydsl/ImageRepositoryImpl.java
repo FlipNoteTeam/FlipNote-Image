@@ -19,7 +19,9 @@ import flipnote.image.domain.model.reference.QImageRef;
 import flipnote.image.domain.model.reference.Reference;
 import flipnote.image.domain.model.reference.ReferenceType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class ImageRepositoryImpl implements ImageRepositoryCustom {
@@ -38,6 +40,7 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
 			.from(imageRef)
 			.where(where)
 			.fetchOne();
+
 
 		return Optional.ofNullable(image);
 	}
