@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import flipnote.image.application.port.out.ImageRefPort;
 
+import flipnote.image.application.port.out.PublicUrlPort;
 import flipnote.image.domain.model.image.Image;
 import flipnote.image.domain.model.reference.ImageRef;
 import flipnote.image.domain.model.reference.ReferenceType;
@@ -21,6 +22,7 @@ public class ImageRefRepositoryAdapter implements ImageRefPort {
 
     private final ImageRefRepository imageRefRepository;
     private final ImageRepository imageRepository;
+    private final PublicUrlPort publicUrlPort;
 
     /**
      * 참조한 타입과 아이디를 통해 ref 저장
@@ -50,17 +52,13 @@ public class ImageRefRepositoryAdapter implements ImageRefPort {
     @Override
     public void activate(Long imageRefId, ReferenceType referenceType, Long referenceId) {
 
-        log.debug("fsdf "+imageRefId.toString());
+		ImageRef imageRef = imageRefRepository.findById(imageRefId).orElseThrow(
+			() -> new IllegalArgumentException("ImageRef is Blank")
+		);
 
-        ImageRef imageRef = imageRefRepository.findById(imageRefId).orElseThrow(
-            () -> new IllegalArgumentException("ImageRef is Blank")
-        );
+		imageRef.getReference().activate(referenceType, referenceId);
 
-        imageRef.activate(referenceType, referenceId);
-
-        imageRefRepository.save(imageRef);
-
-        log.debug("save");
+		imageRefRepository.save(imageRef);
 
     }
 
@@ -102,5 +100,13 @@ public class ImageRefRepositoryAdapter implements ImageRefPort {
         Long referenceId = imageRef.getReference().getId();
 
         return new ImageRefRow(imageRef.getId(), type, referenceId);
+    }
+
+    @Override
+    public String getUrlByRefId(Long imageRefId) {
+
+        Image image = imageRefRepository.findById(imageRefId).get().getImage();
+
+        return publicUrlPort.urlOf(image.getS3Key());
     }
 }

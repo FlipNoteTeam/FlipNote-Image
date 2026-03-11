@@ -1,6 +1,7 @@
 package flipnote.image.application.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import flipnote.image.application.port.in.ChangeImageUseCase;
 import flipnote.image.application.port.in.result.ChangeImageResult;
@@ -22,6 +23,7 @@ public class ChangeImageService implements ChangeImageUseCase {
 	private final PublicUrlPort publicUrlPort;
 
 	@Override
+	@Transactional
 	public ChangeImageResult changeImage(Long newImageRefId, ReferenceType type, Long referenceId) {
 
 		//참조 대상에 연결된 ref 조회
