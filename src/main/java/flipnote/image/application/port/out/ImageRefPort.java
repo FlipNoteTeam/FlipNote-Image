@@ -19,8 +19,8 @@ public interface ImageRefPort {
 
 	ImageRefRow findById(Long newImageRefId);
 
+	String getUrlByRefId(Long imageRefId);
 
-
-	record ImageRefAndImage(Long id, Long imageId) {}
+	record ImageRefAndImage(Long imageRefId, Long imageId) {}
 	record ImageRefRow(Long id, ReferenceType type, Long referenceId) {}
 }

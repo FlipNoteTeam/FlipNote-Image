@@ -6,19 +6,23 @@ import org.springframework.stereotype.Repository;
 
 import flipnote.image.application.port.out.ImageRefPort;
 
+import flipnote.image.application.port.out.PublicUrlPort;
 import flipnote.image.domain.model.image.Image;
 import flipnote.image.domain.model.reference.ImageRef;
 import flipnote.image.domain.model.reference.ReferenceType;
 import flipnote.image.infrastructure.persistence.jpa.ImageRefRepository;
 import flipnote.image.infrastructure.persistence.jpa.ImageRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class ImageRefRepositoryAdapter implements ImageRefPort {
 
     private final ImageRefRepository imageRefRepository;
     private final ImageRepository imageRepository;
+    private final PublicUrlPort publicUrlPort;
 
     /**
      * 참조한 타입과 아이디를 통해 ref 저장
@@ -34,6 +38,8 @@ public class ImageRefRepositoryAdapter implements ImageRefPort {
 
         ImageRef imageRef = imageRefRepository.save(ImageRef.createImageRef(image));
 
+        log.debug(imageRef.getId().toString());
+
         return new ImageRefAndImage(imageRef.getId(), image.getId());
     }
 
@@ -45,13 +51,14 @@ public class ImageRefRepositoryAdapter implements ImageRefPort {
      */
     @Override
     public void activate(Long imageRefId, ReferenceType referenceType, Long referenceId) {
-        ImageRef imageRef = imageRefRepository.findById(imageRefId).orElseThrow(
-            () -> new IllegalArgumentException("ImageRef is Blank")
-        );
 
-        imageRef.getReference().activate(referenceType, referenceId);
+		ImageRef imageRef = imageRefRepository.findById(imageRefId).orElseThrow(
+			() -> new IllegalArgumentException("ImageRef is Blank")
+		);
 
-        imageRefRepository.save(imageRef);
+		imageRef.getReference().activate(referenceType, referenceId);
+
+		imageRefRepository.save(imageRef);
 
     }
 
@@ -93,5 +100,13 @@ public class ImageRefRepositoryAdapter implements ImageRefPort {
         Long referenceId = imageRef.getReference().getId();
 
         return new ImageRefRow(imageRef.getId(), type, referenceId);
+    }
+
+    @Override
+    public String getUrlByRefId(Long imageRefId) {
+
+        Image image = imageRefRepository.findById(imageRefId).get().getImage();
+
+        return publicUrlPort.urlOf(image.getS3Key());
     }
 }

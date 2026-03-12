@@ -1,6 +1,7 @@
 package flipnote.image.application.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import flipnote.image.application.port.in.ActivateImageUseCase;
 import flipnote.image.application.port.out.ImagePort;
@@ -8,7 +9,9 @@ import flipnote.image.application.port.out.ImageRefPort;
 import flipnote.image.application.port.out.ObjectMetadataPort;
 import flipnote.image.domain.model.reference.ReferenceType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ActivateImageService implements ActivateImageUseCase {
@@ -24,6 +27,7 @@ public class ActivateImageService implements ActivateImageUseCase {
 	 * @param referenceId 참조 아이디
 	 */
 	@Override
+	@Transactional
 	public void activateImage(Long imageRefId, ReferenceType referenceType, Long referenceId) {
 		//이미지 참조 활성화
 		imageRefPort.activate(imageRefId, referenceType, referenceId);

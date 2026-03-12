@@ -41,4 +41,8 @@ public class Reference {
 		this.type = referenceType;
 		this.id = referenceId;
 	}
+
+	public static Reference of(ReferenceType type, Long id) {
+		return new Reference(type, id);
+	}
 }

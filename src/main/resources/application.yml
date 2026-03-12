@@ -7,11 +7,11 @@ spring:
 
   grpc:
     server:
-      port: 9090
+      port: 9092
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DB_URL:jdbc:mysql://localhost:3306/flipnote_image}
+    url: ${DB_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
 
