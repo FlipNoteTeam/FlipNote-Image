@@ -12,7 +12,9 @@ import flipnote.image.application.port.out.ImageS3KeyPort;
 import flipnote.image.application.port.out.PublicUrlPort;
 import flipnote.image.domain.model.reference.ReferenceType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ChangeImageService implements ChangeImageUseCase {
@@ -43,6 +45,7 @@ public class ChangeImageService implements ChangeImageUseCase {
 		if(target.referenceId() != null &&
 			!(target.type() == type && target.referenceId() == referenceId)
 		) {
+			log.error("conflict_image_ref");
 			throw new IllegalArgumentException("conflict_image_ref");
 		}
 

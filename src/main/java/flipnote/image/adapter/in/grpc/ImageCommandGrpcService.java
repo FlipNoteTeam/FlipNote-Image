@@ -103,6 +103,7 @@ public class ImageCommandGrpcService extends ImageCommandServiceGrpc.ImageComman
 			responseObserver.onNext(res);
 			responseObserver.onCompleted();
 		} catch (Exception e) {
+			log.error("changeImage", e);
 			responseObserver.onError(e);
 		}
 	}
