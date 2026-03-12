@@ -74,9 +74,13 @@ public class ImageCommandGrpcService extends ImageCommandServiceGrpc.ImageComman
 
 			log.debug("{} {} {}", type.name(), request.getImageRefId(), request.getReferenceId());
 
-			activateImageUseCase.activateImage(request.getImageRefId(), type, request.getReferenceId());
+			String url = activateImageUseCase.activateImage(request.getImageRefId(), type, request.getReferenceId());
 
-			responseObserver.onNext(ActivateImageResponse.newBuilder().build());
+			ActivateImageResponse res = ActivateImageResponse.newBuilder()
+				.setUrl(url)
+				.build();
+
+			responseObserver.onNext(res);
 			responseObserver.onCompleted();
 		} catch (Exception e) {
 			log.error("gRPC 에러 메시지: {}", e.getMessage());
