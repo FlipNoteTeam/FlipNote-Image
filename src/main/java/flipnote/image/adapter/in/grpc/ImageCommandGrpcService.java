@@ -6,6 +6,7 @@ import org.springframework.grpc.server.service.GrpcService;
 import flipnote.image.application.port.in.ActivateImageUseCase;
 import flipnote.image.application.port.in.ChangeImageUseCase;
 import flipnote.image.application.port.in.GetImageUrlByReferenceUseCase;
+import flipnote.image.application.port.in.result.ChangeImageResult;
 import flipnote.image.domain.model.reference.ReferenceType;
 import flipnote.image.grpc.v1.ActivateImageRequest;
 import flipnote.image.grpc.v1.ActivateImageResponse;
@@ -69,7 +70,16 @@ public class ImageCommandGrpcService extends ImageCommandServiceGrpc.ImageComman
 	public void changeImage(ChangeImageRequest request, StreamObserver<ChangeImageResponse> responseObserver) {
 		try {
 			ReferenceType type = mapType(request.getReferenceType());
-			changeImageUseCase.changeImage(request.getImageRefId(), type, request.getReferenceId());
+			ChangeImageResult changeImageResult = changeImageUseCase.changeImage(request.getImageRefId(), type,
+				request.getReferenceId());
+
+			ChangeImageResponse res = ChangeImageResponse.newBuilder()
+				.setImageRefId(changeImageResult.imageRefId())
+				.setUrl(changeImageResult.url())
+				.build();
+
+			responseObserver.onNext(res);
+			responseObserver.onCompleted();
 		} catch (Exception e) {
 			responseObserver.onError(e);
 		}
