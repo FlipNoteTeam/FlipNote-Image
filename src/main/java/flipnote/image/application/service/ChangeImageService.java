@@ -35,7 +35,9 @@ public class ChangeImageService implements ChangeImageUseCase {
 		if(newImageRefId == null) {
 			current.ifPresent(id -> imageRefPort.delete(id));
 
+			log.debug("다른 대상일 경우");
 			return ChangeImageResult.from(null, defaultImagePort.defaultUrl(type));
+
 		}
 
 		//2. 신규 이미지로 변경할 경우
@@ -45,12 +47,16 @@ public class ChangeImageService implements ChangeImageUseCase {
 		if(target.referenceId() != null &&
 			!(target.type() == type && target.referenceId() == referenceId)
 		) {
+			log.debug("다른 대상 연결");
 			log.error("conflict_image_ref");
 			throw new IllegalArgumentException("conflict_image_ref");
 		}
 
 		// 다른 경우 기존 연결 제거 후 새 연결
 		if(current.isPresent() && !current.get().equals(newImageRefId)) {
+
+			log.debug("기존 연결 삭제 후 새연결");
+
 			current.ifPresent(imageRefPort::delete);
 			imageRefPort.activate(newImageRefId, type, referenceId);
 		}

@@ -56,7 +56,7 @@ public class ImageRefRepositoryAdapter implements ImageRefPort {
 			() -> new IllegalArgumentException("ImageRef is Blank")
 		);
 
-		imageRef.getReference().activate(referenceType, referenceId);
+		imageRef.activate(referenceType, referenceId);
 
 		imageRefRepository.save(imageRef);
 
@@ -92,9 +92,22 @@ public class ImageRefRepositoryAdapter implements ImageRefPort {
 
     @Override
     public ImageRefRow findById(Long imageRefId) {
-        ImageRef imageRef = imageRefRepository.findById(imageRefId).orElseThrow(
-            () -> new IllegalArgumentException("Image")
-        );
+
+		log.debug("{}", imageRefId);
+
+        Optional<ImageRef> imageRefOptional = imageRefRepository.findById(imageRefId);
+
+		log.debug("{}", imageRefOptional.get().getId());
+
+        ImageRef imageRef = imageRefOptional.get();
+
+        // ImageRef imageRef = imageRefRepository.findById(imageRefId).orElseThrow(
+        //     () -> new IllegalArgumentException("error")
+        // );
+
+        if(imageRef.getReference()==null) {
+            return new ImageRefRow(imageRef.getId(), null, null);
+        }
 
         ReferenceType type = imageRef.getReference().getType();
         Long referenceId = imageRef.getReference().getId();
