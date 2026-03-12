@@ -7,6 +7,7 @@ import flipnote.image.application.port.in.ActivateImageUseCase;
 import flipnote.image.application.port.out.ImagePort;
 import flipnote.image.application.port.out.ImageRefPort;
 import flipnote.image.application.port.out.ObjectMetadataPort;
+import flipnote.image.application.port.out.PublicUrlPort;
 import flipnote.image.domain.model.reference.ReferenceType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ public class ActivateImageService implements ActivateImageUseCase {
 	private final ImagePort imagePort;
 	private final ImageRefPort imageRefPort;
 	private final ObjectMetadataPort objectMetadataPort;
+	private final PublicUrlPort publicUrlPort;
 
 	/**
 	 * 이미지 활성화
@@ -28,7 +30,7 @@ public class ActivateImageService implements ActivateImageUseCase {
 	 */
 	@Override
 	@Transactional
-	public void activateImage(Long imageRefId, ReferenceType referenceType, Long referenceId) {
+	public String activateImage(Long imageRefId, ReferenceType referenceType, Long referenceId) {
 		//이미지 참조 활성화
 		imageRefPort.activate(imageRefId, referenceType, referenceId);
 
@@ -45,5 +47,7 @@ public class ActivateImageService implements ActivateImageUseCase {
 			var metadata = objectMetadataPort.head(row.s3Key());
 			imagePort.updateMetadata(imageId, metadata.contentType(), metadata.contentLength());
 		}
+
+		return publicUrlPort.urlOf(row.s3Key());
 	}
 }

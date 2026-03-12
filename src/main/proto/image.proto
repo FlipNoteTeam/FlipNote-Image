@@ -50,6 +50,7 @@ message ActivateImageRequest {
 }
 
 message ActivateImageResponse {
+  string url = 1;
 }
 
 message ChangeImageRequest {
