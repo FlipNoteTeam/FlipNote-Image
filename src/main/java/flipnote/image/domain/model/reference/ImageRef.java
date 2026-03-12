@@ -23,12 +23,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "image_reference",
-	uniqueConstraints = @UniqueConstraint(
-		name = "uk_image_ref",
-		columnNames = {"reference_type", "reference_id"}
-	)
-)
+@Table(name = "image_reference")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ImageRef extends BaseEntity {
 	@Id
